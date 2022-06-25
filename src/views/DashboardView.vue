@@ -1,15 +1,18 @@
 <template>
-  <!-- As a link -->
-  <nav class="navbar navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand">Navbar</a>
-    </div>
-  </nav>
-  <router-view />
+  <Navbar></Navbar>
+  <div class="container-fluid">
+    <router-view />
+  </div>
 </template>
 
 <script>
+import Navbar from "@/components/NavbarComponent.vue";
+import emitter from "@/methods/emitter";
+import pushMessagesState from "@/methods/pushMessagesState";
 export default {
+  components: {
+    Navbar,
+  },
   created() {
     const token = document.cookie.replace(
       /(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/,
@@ -25,6 +28,12 @@ export default {
         this.$router.push("/login");
       }
     });
+  },
+  provide() {
+    return {
+      emitter,
+      pushMessagesState,
+    };
   },
 };
 </script>

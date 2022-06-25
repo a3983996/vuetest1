@@ -1,4 +1,5 @@
 <template>
+  <Vue3Loading :active="isLoading"></Vue3Loading>
   <form @submit.prevent="signIn">
     <div class="mb-3">
       <label for="exampleInputEmail1" class="form-label">Email address</label>
@@ -37,19 +38,20 @@ export default {
         username: "",
         password: "",
       },
+      isLoading: false,
     };
   },
   methods: {
     signIn() {
-      console.log("login");
       const api = `${process.env.VUE_APP_API}admin/signin`;
-      console.log(api);
+      this.isLoading = true;
       this.$http.post(api, this.user).then((res) => {
+        this.isLoading = false;
         if (res.data.success) {
           const { token, expired } = res.data;
           document.cookie = `hexToken=${token};
            expires=${new Date(expired)}`;
-          this.$router.push("/dashboard");
+          this.$router.push("/dashboard/products");
         }
       });
     },
